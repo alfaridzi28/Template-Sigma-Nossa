@@ -1,0 +1,28 @@
+<IfModule mod_rewrite.c>
+
+Options +FollowSymLinks
+RewriteEngine On
+
+RewriteCond %{REQUEST_URI} !^/public/ 
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^(.*)$ /public/$1 
+#RewriteRule ^ index.php [L]
+RewriteRule ^(/)?$ public/index.php [L]
+
+RewriteCond %{REQUEST_METHOD} ^TRACE
+RewriteRule ^ - [F]
+
+</IfModule>
+
+#Disable index view
+options -Indexes
+
+#hide a Specifuc File
+
+<Files .env>
+order allow,deny
+Deny from all
+</Files>

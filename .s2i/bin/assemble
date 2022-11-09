@@ -1,0 +1,11 @@
+#!/bin/bash
+/usr/libexec/s2i/assemble
+echo "bismillah...:"
+echo "Disabling Trace..."
+echo "TraceEnable Off" > /opt/app-root/etc/conf.d/disabletrace.conf
+echo "Trace disabled"
+
+cp .env.example .env
+php artisan key:generate
+
+#echo "curl.cainfo = /opt/app-root/src/cacert.pem" >>/etc/php.d/99-curl.ini
