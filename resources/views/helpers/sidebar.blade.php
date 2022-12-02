@@ -12,6 +12,8 @@
                         <span> List Module </span></a></li>
                 <li><a href="{{ route('capacity.index') }}" class="waves-effect"><i class="dripicons-archive"></i>
                         <span> Master Capacity </span></a></li>
+                <li><a href="{{ route('profillingbcp.index') }}" class="waves-effect"><i class="dripicons-archive"></i>
+                        <span> Profilling BCP </span></a></li>
             </ul>
             @endif
 
@@ -20,7 +22,8 @@
                 <li class="menu-title">{{ $module->title }}</li>
                 @foreach ($module->submodules as $submodule)
                 @if (\Str::contains(auth()->user()->module, ['all', $submodule->slug]) || auth()->user()->ldap)
-                <li><a href="{{ route('user.menu', $submodule->id) }}" class="waves-effect"><i class="dripicons-expand"></i>
+                <li><a href="{{ route('user.menu', $submodule->id) }}" class="waves-effect"><i
+                            class="dripicons-expand"></i>
                         <span> {{ $submodule->subtitle }} </span>
                     </a></li>
                 @endif

@@ -12,8 +12,8 @@
 */
 
 if (getenv('APP_PROTOCOL') && getenv('APP_PROTOCOL') !== 'http') {
-  URL::forceScheme('https');
-}	
+    URL::forceScheme('https');
+}
 
 Route::get('/', function () {
     return redirect('/login');
@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/capacity', 'CapacityController');
     Route::get('/capacity-report', 'CapacityController@report')->name('capacity.report');
     Route::get('/capacity-status', 'CapacityController@status')->name('capacity.status');
+
+    Route::resource('/profillingbcp', 'ProfillingBcpController');
 
     Route::resource('/module', 'ModuleController');
     Route::resource('/submodule', 'SubmoduleController');
