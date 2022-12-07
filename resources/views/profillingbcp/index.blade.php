@@ -53,6 +53,32 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- <button class="btn btn-primary mb-2" type="button" data-toggle="modal" data-target="#Modal">Add
+                Capacity</button> -->
+            <div class="card">
+                <div class="card-body">
+
+                    <table id="datatable1"
+                        class="datatable table table-bordered text-center table-condensed table-hover table-striped"
+                        style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>DS</th>
+                                <th>Cl ID</th>
+                                <th>Nas Node ID</th>
+                                <th>Onu SN</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 @endsection
 
@@ -137,6 +163,50 @@ $('#datatable').DataTable({
             data: 'ne_access_occupancy_value',
             name: 'ne_access_occupancy_value'
         },
+    ],
+});
+
+$('#datatable1').DataTable({
+    scrollY: true,
+    scrollX: true,
+    scrollCollapse: true,
+    deferRender: true,
+    processing: true,
+    serverSide: true,
+    order: [
+        [0, 'asc']
+    ],
+    ajax: {
+        'url': "{{route ('profillingbcp.count')}}"
+    },
+    columns: [{
+            "data": null,
+            "orderable": false,
+            "searchable": false,
+            "render": function(data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            data: 'ds',
+            name: 'ds'
+        },
+        {
+            data: 'clid',
+            name: 'clid'
+        },
+        {
+            data: 'nas_node_id',
+            name: 'nas_node_id'
+        },
+        {
+            data: 'onu_sn',
+            name: 'onu_sn'
+        },
+        {
+            data: 'count',
+            name: 'count'
+        }
     ],
 });
 </script>

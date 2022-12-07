@@ -10,16 +10,16 @@
                     <div class="col-md-8">
                         <h4 class="page-title mb-0">Capacity</h4>
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="#">SCMT UI</a></li>
-                            <li class="breadcrumb-item"><a href="#">User Management</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">List Capacity</li>
+                            <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">List Profilling BCP</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @include(' capacity.modal.alert') <div class="row">
+    @include(' capacity.modal.alert')
+    <div class="row">
         <div class="col-lg-12">
             <button class="btn btn-primary mb-2" type="button" data-toggle="modal" data-target="#Modal">Add
                 Capacity</button>

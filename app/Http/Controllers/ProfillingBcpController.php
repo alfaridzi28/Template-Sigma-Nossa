@@ -29,6 +29,16 @@ class ProfillingBcpController extends Controller
         return view('profillingbcp.index', compact('modules'));
     }
 
+    public function count(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $data = ProfillingBcp::groupBy('ds', 'clid', 'nas_node_id', 'onu_sn')->selectRaw('count(*) as count, ds,clid,nas_node_id,onu_sn')->get();
+
+            return DataTables::of($data)->make(true);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *
