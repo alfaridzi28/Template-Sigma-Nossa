@@ -9,27 +9,27 @@ use App\Module;
 
 class CapacityController extends Controller
 {
-    
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $data = Capacity::query();
-            
+
             return DataTables::of($data)
-            ->addColumn('aksi', function ($data){
-                return '<div class="btn-group">
-                <a href="javascript:void(0)" data-toggle="tooltip" data-id="'.$data->id. '" class="btn btn-warning btn-sm editCapacity"><i class="dripicons-document-edit"></i></a>
-                <a href="'. route('capacity.destroy', $data->id) .'" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#deleteModal"><i class="dripicons-tag-delete"></i></a>
+                ->addColumn('aksi', function ($data) {
+                    return '<div class="btn-group">
+                <a href="javascript:void(0)" data-toggle="tooltip" data-id="' . $data->id . '" class="btn btn-warning btn-sm editCapacity"><i class="dripicons-document-edit"></i></a>
+                <a href="' . route('capacity.destroy', $data->id) . '" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#deleteModal"><i class="dripicons-tag-delete"></i></a>
                 </div>
                 ';
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
         }
 
         $modules           = Module::with('submodules')->get();
-        
+
         return view('capacity.index', compact('modules'));
     }
 

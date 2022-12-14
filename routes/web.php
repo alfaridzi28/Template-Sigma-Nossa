@@ -51,7 +51,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/capacity-status', 'CapacityController@status')->name('capacity.status');
 
     Route::resource('/profillingbcp', 'ProfillingBcpController');
-    Route::get('/profillingbcp-count', 'ProfillingBcpController@count')->name('profillingbcp.count');
+    Route::get('/profillingbcp-sto', 'ProfillingBcpController@showsto')->name('profillingbcp.sto');
+    Route::get('/profillingbcp-gpon', 'ProfillingBcpController@showgpon')->name('profillingbcp.gpon');
+    Route::get('/profillingbcp-all', 'ProfillingBcpController@showall')->name('profillingbcp.all');
+
+    Route::resource('/sto', 'StoController');
 
     Route::resource('/module', 'ModuleController');
     Route::resource('/submodule', 'SubmoduleController');
