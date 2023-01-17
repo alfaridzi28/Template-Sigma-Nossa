@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('template.template')
 
 @section('body')
 <div class="container-fluid">
@@ -10,14 +10,12 @@
                     <div class="col-md-8">
                         <h4 class="page-title mb-0">Profilling BCP</h4>
                         <ol class="breadcrumb m-0">
-                            <!-- <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{route('profillingbcp.index')}}">List Regional &
-                                    Witel</a>
-                            <li class="breadcrumb-item"><a href="{{url('profillingbcp-sto?witel=$witel')}}">List
-                                    STO</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">List Cl Id</li>
-                            </li> -->
+                            <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{route('profillingbcp.index')}}">Regional &
+                                    Witel</a></li>
+                            <li class="breadcrumb-item"><a href="{{ URL::route('profillingbcp.witel') }}">STO</a></li>
+                            <li class="breadcrumb-item"><a href="{{ URL::previous() }}">List Clid</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">List All {{$clid}}</li>
                         </ol>
                     </div>
                 </div>
@@ -29,7 +27,25 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="profillingall"
+                    <div class="row">
+                        <div class="col-12">
+                            <select name="filter_rating" id="filter_rating" class="form-control filter">
+                                <option value="">Choose Rating</option>
+                                <option value="Bad">Bad</option>
+                                <option value="Poor">Poor</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <table id="profillingbcp"
                         class="datatable table table-bordered text-center table-condensed table-hover table-striped"
                         style="width: 100%;">
                         <thead>
@@ -84,16 +100,20 @@
 <script>
 $.ajaxSetup({
     headers: {
-        'X-CSRF-TOKEN': $('meta[name=" csrf-token"]').attr('content')
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+
 $(document).ready(function() {
 
-    var dataTable = $("#profillingall").DataTable({
+    let rating = $('#filter_rating').val()
+
+    var dataTable = $("#profillingbcp").DataTable({
         ajax: {
-            url: "{{route ('profillingbcp.all')}}",
-            data: {
-                clid: '<?php echo ($clid) ?>'
+            url: "",
+            data: function(d) {
+                d.rating = rating;
+                return d
             }
         },
         order: [
@@ -108,9 +128,8 @@ $(document).ready(function() {
         stateSave: true,
 
         columns: [{
-                "data": null,
-                "orderable": false,
-                "searchable": false,
+                data: null,
+                "sortable": false,
                 render: function(data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
@@ -254,6 +273,12 @@ $(document).ready(function() {
         ],
 
     });
+
+    $('.filter').on('change', function() {
+        rating = $('#filter_rating').val()
+
+        dataTable.ajax.reload(null, false)
+    })
 
 });
 </script>

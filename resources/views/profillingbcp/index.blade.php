@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('template.template')
 
 @section('body')
 <div class="container-fluid">
@@ -10,8 +10,8 @@
                     <div class="col-md-8">
                         <h4 class="page-title mb-0">Profilling BCP</h4>
                         <ol class="breadcrumb m-0">
-                            <!-- <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">List Regional & Witel</li> -->
+                            <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">List Regional & Witel</li>
                         </ol>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
-                            <select name="filter_regional" id="filter_regional" class=" form-control filter-select">
+                            <select name="filter_regional" id="filter_regional" class=" form-control filter">
                                 <option value="">Choose Regional</option>
                                 @foreach($regional as $region)
                                 <option value="{{$region->regional}}">{{$region->regional}}</option>
@@ -33,18 +33,16 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <select name="filter_witel" id="filter_witel" class="form-control filter-select">
+                            <select name="filter_witel" id="filter_witel" class="form-control filter">
                                 <option value="">Choose Witel</option>
-                                @foreach($witel as $wtl)
-                                <option value="{{$wtl->witel}}">{{$wtl->witel}}</option>
-                                @endforeach
                             </select>
                         </div>
                         <div class="col-4">
-                            <div class="form-group">
-                                <button type="button" id=filter class="btn btn-info">Filter</button>
-                                <button type="button" id=reset class="btn btn-primary">Reset</button>
-                            </div>
+                            <select name="filter_rating" id="filter_rating" class="form-control filter">
+                                <option value="">Choose Rating</option>
+                                <option value="Bad">Bad</option>
+                                <option value="Poor">Poor</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -87,74 +85,85 @@ $.ajaxSetup({
 
 $(document).ready(function() {
 
-    fill_datatable();
+    let regionall = $('#filter_regional').val(),
+        witell = $('#filter_witel').val(),
+        rating = $('#filter_rating').val()
 
-    function fill_datatable(filter_regional = '', filter_witel = '') {
-        var dataTable = $("#profillingbcp").DataTable({
-            ajax: {
-                url: "{{route ('profillingbcp.index')}}",
-                data: {
-                    filter_regional: filter_regional,
-                    filter_witel: filter_witel,
+    var dataTable = $("#profillingbcp").DataTable({
+        ajax: {
+            url: "{{route ('profillingbcp.index')}}",
+            data: function(d) {
+                d.regionall = regionall;
+                d.witell = witell;
+                d.rating = rating;
+                return d
+            }
+        },
+        order: [
+            [0, 'asc'],
+            [1, 'asc'],
+        ],
+        processing: true,
+        serverSide: true,
+        select: true,
+        stateSave: true,
+
+        columns: [{
+                data: null,
+                "sortable": false,
+                render: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-            order: [
-                [0, 'asc'],
-                [1, 'asc'],
-            ],
-            processing: true,
-            serverSide: true,
-            select: true,
-            stateSave: true,
+            {
+                data: 'regional',
+                name: 'regional'
+            },
+            {
+                data: 'witel',
+                name: 'witel'
+            },
+            {
+                data: 'rating',
+                name: 'rating'
+            },
+            {
+                data: 'count',
+                name: 'count',
+                render: $.fn.dataTable.render.number(',', '.')
+            },
+        ],
 
-            columns: [{
-                    data: null,
-                    "sortable": false,
-                    render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                },
-                {
-                    data: 'regional',
-                    name: 'regional'
-                },
-                {
-                    data: 'witel',
-                    name: 'witel'
-                },
-                {
-                    data: 'rating',
-                    name: 'rating'
-                },
-                {
-                    data: 'count',
-                    name: 'count',
-                    render: $.fn.dataTable.render.number(',', '.')
-                },
-            ],
+    });
 
+    $('#filter_regional').on('change', function() {
+        var regional = $(this).val();
+        $("#filter_witel").html('');
+        $.ajax({
+            type: 'POST',
+            url: "{{route ('profillingbcp.findwitel')}}",
+            data: {
+                'regional': regional
+            },
+            dataType: 'json',
+            success: function(result) { // Jika berhasil
+                $('#filter_witel').html(
+                    '<option value="">Choose Witel</option>'); // Berikan hasil ke witel
+                $.each(result.regional, function(key, value) {
+                    $("#filter_witel").append('<option value="' + value
+                        .witel + '">' + value.witel + '</option>');
+                });
+            }
         });
-    }
-
-    $('#filter').click(function() {
-        var filter_regional = $('#filter_regional').val();
-        var filter_witel = $('#filter_witel').val();
-
-        if (filter_regional != '' && filter_regional != '') {
-            $('#profillingbcp').DataTable().destroy();
-            fill_datatable(filter_regional, filter_witel);
-        } else {
-            alert('Select Both filter option');
-        }
     });
 
-    $('#reset').click(function() {
-        $('#filter_regional').val();
-        $('#filter_witel').val();
+    $('.filter').on('change', function() {
+        regionall = $('#filter_regional').val()
+        witell = $('#filter_witel').val()
+        rating = $('#filter_rating').val()
 
-        $('#profillingbcp').DataTable().destroy();
-        fill_datatable();
-    });
+        dataTable.ajax.reload(null, false)
+    })
 
 });
 </script>

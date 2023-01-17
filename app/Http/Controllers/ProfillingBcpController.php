@@ -11,31 +11,39 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProfillingBcpController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         if ($request->ajax()) {
 
-            if (!empty($request->filter_regional)) {
+
+            $data = ProfillingBcp::groupBy('regional', 'witel', 'rating')
+                ->selectRaw('count(*) as count, regional, witel, rating')
+                ->get();
+
+            if ($request->input('regionall') != null) {
                 $data = ProfillingBcp::groupBy('regional', 'witel', 'rating')
                     ->selectRaw('count(*) as count, regional, witel, rating')
-                    ->where('regional', $request->filter_regional)
-                    ->where('witel', $request->filter_witel)
+                    ->where('regional', $request->regionall)
                     ->get();
-            } else {
+            }
+            if ($request->input('witell') != null) {
                 $data = ProfillingBcp::groupBy('regional', 'witel', 'rating')
                     ->selectRaw('count(*) as count, regional, witel, rating')
+                    ->where('witel', $request->witell)
+                    ->get();
+            }
+            if ($request->input('rating') != '') {
+                $data = ProfillingBcp::groupBy('regional', 'witel', 'rating')
+                    ->selectRaw('count(*) as count, regional, witel, rating')
+                    ->where('rating', $request->rating)
                     ->get();
             }
 
             return DataTables::of($data)
                 ->addColumn('witel', function ($query) {
                     $witel = $query->witel;
-                    return '<a href=' . url("/profillingbcp-sto?witel=$witel") . ' id="sto_witel">' . $witel . '</a>';
+                    return
+                        '<a href="' . route('profillingbcp.witel', $witel) . '" id="sto_witel">' . $witel . '</a>';
                 })
                 ->rawColumns(['witel'])
                 ->make(true);
@@ -45,89 +53,108 @@ class ProfillingBcpController extends Controller
 
         $witel = ProfillingBcp::select('witel')->groupBy('witel')->orderBy('witel', 'asc')->get();
 
-        $modules = Module::with('submodules')->get();
-
-        return view('profillingbcp.index', compact('modules', 'regional', 'witel'));
+        return view('profillingbcp.index', compact('regional', 'witel'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function showsto(Request $request)
+    public function findwitel(Request $request)
     {
-        $witel = $request->get('witel');
+        $data['regional'] = ProfillingBcp::where("regional", $request->regional)->groupBy('witel')
+            ->get(["witel"]);
+
+        return response()->json($data);
+    }
+
+    public function showwitel(Request $request, $witel)
+    {
 
         if ($request->ajax()) {
 
-            if ($request->witel) {
+            $data = ProfillingBcp::groupBy('sto', 'rating')
+                ->selectRaw('count(*) as count, sto, rating')
+                ->where('witel', $witel)
+                ->get();
 
+            if ($request->input('sto') != null) {
                 $data = ProfillingBcp::groupBy('sto', 'rating')
                     ->selectRaw('count(*) as count, sto, rating')
-                    ->where('witel', $request->witel)
+                    ->where('sto', $request->sto)
+                    ->get();
+            }
+            if ($request->input('rating') != '') {
+                $data = ProfillingBcp::groupBy('sto', 'rating')
+                    ->selectRaw('count(*) as count, sto, rating')
+                    ->where('rating', $request->rating)
                     ->get();
             }
 
             return DataTables::of($data)
                 ->addColumn('sto', function ($query) {
                     $sto = $query->sto;
-                    return '<a href=' . url("profillingbcp-gpon?sto=$sto") . '>' . $sto . '</a>';
+                    return
+                        '<a href="' . route('profillingbcp.sto', $sto) . '" id="clid_sto">' . $sto . '</a>';
                 })
                 ->rawColumns(['sto'])
                 ->make(true);
         }
 
-        $modules = Module::with('submodules')->get();
+        $sto = ProfillingBcp::select('sto')
+            ->groupBy('sto')
+            ->orderBy('sto', 'asc')
+            ->where('witel', $witel)
+            ->get();
 
-        return view('profillingbcp.sto', compact('modules', 'witel'));
+        return view('profillingbcp.witel', compact('sto'));
     }
 
-    public function showgpon(Request $request)
+    public function showsto(Request $request, $sto)
     {
-        $sto = $request->get('sto');
 
         if ($request->ajax()) {
 
-            if ($request->sto) {
+            $data = ProfillingBcp::groupBy('clid', 'rating')
+                ->selectRaw('count(*) as count, clid, rating')
+                ->where('sto', $sto)
+                ->get();
 
+            if ($request->input('rating') != '') {
                 $data = ProfillingBcp::groupBy('clid', 'rating')
                     ->selectRaw('count(*) as count, clid, rating')
-                    ->where('sto', $request->sto)
+                    ->where('rating', $request->rating)
                     ->get();
             }
 
             return DataTables::of($data)
                 ->addColumn('clid', function ($query) {
                     $clid = $query->clid;
-                    return '<a href=' . url("profillingbcp-all?clid=$clid") . '>' . $clid . '</a>';
+                    return
+                        '<a href="' . route('profillingbcp.clid', $clid) . '" id="all_clid">' . $clid . '</a>';
                 })
                 ->rawColumns(['clid'])
                 ->make(true);
         }
 
-        $modules = Module::with('submodules')->get();
-
-        return view('profillingbcp.gpon', compact('modules', 'sto'));
+        return view('profillingbcp.sto');
     }
 
-    public function showall(Request $request)
+    public function showclid(Request $request, $clid)
     {
-        $clid = $request->get('clid');
 
+        $clid;
         if ($request->ajax()) {
 
-            if ($request->clid) {
+            $data = ProfillingBcp::where('clid', $clid)
+                ->get();
 
-                $data = ProfillingBcp::where('clid', '=', $request->clid)->get();
+            if ($request->input('rating') != '') {
+                $data = ProfillingBcp::where('clid', $clid)
+                    ->where('rating', $request->rating)
+                    ->get();
             }
 
-            return DataTables::of($data)->make(true);
+            return DataTables::of($data)
+                ->make(true);
         }
 
-        $modules = Module::with('submodules')->get();
-
-        return view('profillingbcp.all', compact('modules', 'clid'));
+        return view('profillingbcp.clid', compact('clid'));
     }
 }

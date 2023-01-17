@@ -10,9 +10,10 @@
                             List User </span></a></li>
                 <li><a href="{{ route('module.index') }}" class="waves-effect"><i class="dripicons-document-edit"></i>
                         <span> List Module </span></a></li>
-                <li hidden><a href="{{ route('capacity.index') }}" class="waves-effect"><i class="dripicons-archive"></i>
+                <li hidden><a href="{{ route('capacity.index') }}" class="waves-effect"><i
+                            class="dripicons-archive"></i>
                         <span> Master Capacity </span></a></li>
-                <li hidden><a href="{{ route('profillingbcp.index') }}" class="waves-effect"><i class="dripicons-archive"></i>
+                <li><a href="{{ route('profillingbcp.index') }}" class="waves-effect"><i class="dripicons-archive"></i>
                         <span> Profilling BCP </span></a></li>
             </ul>
             @endif
