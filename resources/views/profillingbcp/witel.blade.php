@@ -13,7 +13,7 @@
                             <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{route('profillingbcp.index')}}">Regional &
                                     Witel</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">List STO</li>
+                            <li class="breadcrumb-item active" aria-current="page">List STO from {{$witel}}</li>
                         </ol>
                     </div>
                 </div>

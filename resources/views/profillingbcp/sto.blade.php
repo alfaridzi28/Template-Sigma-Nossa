@@ -14,7 +14,7 @@
                             <li class="breadcrumb-item"><a href="{{route('profillingbcp.index')}}">Regional &
                                     Witel</a></li>
                             <li class="breadcrumb-item"><a href="{{ URL::previous() }}">STO</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">List Clid</li>
+                            <li class="breadcrumb-item active" aria-current="page">List Clid from {{$sto}}</li>
                         </ol>
                     </div>
                 </div>

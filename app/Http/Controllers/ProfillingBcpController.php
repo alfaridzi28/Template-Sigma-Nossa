@@ -67,6 +67,8 @@ class ProfillingBcpController extends Controller
     public function showwitel(Request $request, $witel)
     {
 
+        $witel;
+
         if ($request->ajax()) {
 
             $data = ProfillingBcp::groupBy('sto', 'rating')
@@ -103,11 +105,13 @@ class ProfillingBcpController extends Controller
             ->where('witel', $witel)
             ->get();
 
-        return view('profillingbcp.witel', compact('sto'));
+        return view('profillingbcp.witel', compact('sto', 'witel'));
     }
 
     public function showsto(Request $request, $sto)
     {
+
+        $sto;
 
         if ($request->ajax()) {
 
@@ -133,7 +137,7 @@ class ProfillingBcpController extends Controller
                 ->make(true);
         }
 
-        return view('profillingbcp.sto');
+        return view('profillingbcp.sto', compact('sto'));
     }
 
     public function showclid(Request $request, $clid)
