@@ -27,24 +27,6 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <select name="filter_rating" id="filter_rating" class="form-control filter">
-                                <option value="">Choose Rating</option>
-                                <option value="Bad">Bad</option>
-                                <option value="Poor">Poor</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
                     <table id="profillingbcp"
                         class="datatable table table-bordered text-center table-condensed table-hover table-striped"
                         style="width: 100%;">
