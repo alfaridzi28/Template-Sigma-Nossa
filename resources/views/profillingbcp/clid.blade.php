@@ -13,8 +13,8 @@
                             <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{route('profillingbcp.index')}}">Regional &
                                     Witel</a></li>
-                            <li class="breadcrumb-item"><a href="{{ URL::previous() }}">STO</a></li>
-                            <li class="breadcrumb-item"><a href="{{ URL::previous() }}">List Clid</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:history.back()" id="back_">STO</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:history.back()">List Clid</a></li>
                             <li class="breadcrumb-item active" aria-current="page">List All from {{$clid}}</li>
                         </ol>
                     </div>
@@ -260,6 +260,13 @@ $(document).ready(function() {
         rating = $('#filter_rating').val()
 
         dataTable.ajax.reload(null, false)
+    })
+
+    $('#back_sto').click(function() {
+        var witel = ['witel']
+        console.log(witel)
+
+        return route('profillingbcp.witel', witel);
     })
 
 });

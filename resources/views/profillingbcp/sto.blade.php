@@ -13,7 +13,7 @@
                             <li class="breadcrumb-item"><a href="{{route('user.landing')}}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{route('profillingbcp.index')}}">Regional &
                                     Witel</a></li>
-                            <li class="breadcrumb-item"><a href="{{ URL::previous() }}">STO</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:history.back()">STO</a></li>
                             <li class="breadcrumb-item active" aria-current="page">List Clid from {{$sto}}</li>
                         </ol>
                     </div>
