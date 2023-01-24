@@ -77,6 +77,9 @@
     <!-- Sweetalert -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- HighChart -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
     @stack('scripts')
 </body>
 

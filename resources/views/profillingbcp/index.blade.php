@@ -50,6 +50,13 @@
         </div>
     </div>
 
+    <div class="card">
+        <div class="row">
+            <div id="charregional" style="width:90%; margin: 0 auto">
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
@@ -163,8 +170,42 @@ $(document).ready(function() {
         rating = $('#filter_rating').val()
 
         dataTable.ajax.reload(null, false)
-    })
+    });
 
+    var reg = <?php echo json_encode($reg) ?>;
+    var bad = <?php echo json_encode($bad) ?>;
+    var poor = <?php echo json_encode($poor) ?>;
+
+    Highcharts.chart('charregional', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Chart Regional'
+        },
+        xAxis: {
+            categories: reg
+        },
+        yAxis: {
+            allowDecimals: false,
+            title: {
+                text: 'Amount'
+            }
+        },
+        series: [{
+                name: 'Bad',
+                data: bad
+            },
+            {
+                name: 'Poor',
+                data: poor
+            },
+            // {
+            //     name: 'Poor',
+            //     data: dataRegPoor
+            // }
+        ]
+    });
 });
 </script>
 @endpush

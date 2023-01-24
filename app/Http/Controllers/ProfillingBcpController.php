@@ -49,11 +49,17 @@ class ProfillingBcpController extends Controller
                 ->make(true);
         }
 
-        $regional = ProfillingBcp::select('regional')->groupBy('regional')->orderBy('regional', 'asc')->get();
+        $reg = ProfillingBcp::select('regional')->groupBy('regional')->orderBy('regional', 'asc')->pluck('regional');
+
+        $bad = ProfillingBcp::selectRaw('count(rating) as rating, regional')->where('rating', 'Bad')->groupBy('regional', 'rating')->pluck('rating');
+
+        $poor = ProfillingBcp::selectRaw('count(rating) as rating, regional')->where('rating', 'Poor')->groupBy('regional', 'rating')->pluck('rating');
+
+        $regional = ProfillingBcp::selectRaw('regional')->groupBy('regional')->orderBy('regional', 'asc')->get();
 
         $witel = ProfillingBcp::select('witel')->groupBy('witel')->orderBy('witel', 'asc')->get();
 
-        return view('profillingbcp.index', compact('regional', 'witel'));
+        return view('profillingbcp.index', compact('regional', 'witel', 'reg', 'bad', 'poor'));
     }
 
     public function findwitel(Request $request)
